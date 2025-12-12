@@ -1,46 +1,30 @@
-# PROJECT_RULES — Legal Platform (SEO + Client Portal)
+# Project Rules (Cursor Agents)
 
 ## Stack
-- Next.js (App Router) + TypeScript + Tailwind
-- Payload CMS
-- PostgreSQL (Docker Compose)
-- Auth via HttpOnly cookies (no localStorage tokens)
+- Next.js 15.4.9 (App Router)
+- Payload CMS 3.68.3
+- Postgres via docker compose
 
-## Product goals
-- SEO-first public website for a legal company
-- Blog and content pages editable via CMS
-- Client personal account: case status, documents, chat
-- Admin panel for content, clients, cases
+## Local run
+1) docker compose up -d
+2) npm install
+3) npm run dev
+- Admin: http://localhost:3000/admin
+- API:   http://localhost:3000/api/payload
 
-## Non-negotiables
-- SEO-first: every public page must have metadata (title, description, canonical).
-- Clean URLs, sitemap.xml, robots.txt required.
-- Prefer Server Components for public pages.
-- Security: client can only see their own cases, documents, and messages.
-- No passwords or tokens in localStorage.
+## Critical integration rules (DO NOT BREAK)
+- app/layout.tsx MUST use Payload RootLayout from @payloadcms/next/layouts
+- app/admin/serverFunction.ts MUST be a server action and passed into RootLayout
+- app/admin/[[...segments]]/page.tsx MUST render:
+  - const config = await configPromise
+  - <RootPage config={config} params={params} />
 
-## Folder conventions
-- /app/(public)/...   public SEO pages
-- /app/(app)/...      authenticated client portal
-- /src/payload/...    Payload CMS config and collections
-- /src/lib/...        shared utilities (auth, db, helpers)
+## Env
+- PAYLOAD_SECRET
+- DATABASE_URI
+- NEXT_PUBLIC_SITE_URL
 
-## CMS rules
-- All pages and blog posts must support SEO fields:
-  - metaTitle
-  - metaDescription
-  - canonical
-  - noindex
-- Slugs must be unique and human-readable.
-
-## Output format for AI-generated changes
-1) Short implementation plan
-2) List of affected files
-3) Exact code per file
-4) Commands to run and verify
-5) Security and edge-case notes
-
-## Restrictions
-- Do NOT add heavy dependencies unless justified.
-- Do NOT break existing routes or APIs.
-- Keep MVP simple and extensible.
+## Definition of Done for any change
+- npm run build (must pass)
+- /admin loads without runtime errors
+- /api/payload/users/me responds (200 or 401 depending on auth state)
