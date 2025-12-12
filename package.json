@@ -11,12 +11,14 @@
   "dependencies": {
     "@payloadcms/db-postgres": "^3.68.3",
     "@payloadcms/next": "^3.68.3",
+    "@swc/helpers": "^0.5.17",
     "next": "15.4.9",
     "payload": "^3.68.3",
     "react": "19.0.0",
     "react-dom": "19.0.0"
   },
   "devDependencies": {
+    "@eslint-community/eslint-utils": "^4.9.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
